@@ -1,0 +1,297 @@
+{% extends "base.html" %}
+
+{% block title %}{{ account.first_name }} {{ account.last_name }} - AccountPro{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<div class="page-header">
+    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+        <div style="display: flex; align-items: center; gap: 1rem;">
+            <div style="width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, var(--secondary-color), var(--primary-color)); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 2rem;">
+                {{ account.first_name[0] }}{{ account.last_name[0] }}
+            </div>
+            <div>
+                <h1>{{ account.first_name }} {{ account.last_name }}</h1>
+                <p>Account #{{ account.id }} | {{ account.department }} Department</p>
+            </div>
+        </div>
+        
+        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+            <a href="{{ url_for('edit_account', account_id=account.id) }}" class="btn btn-primary">
+                ✏️ Edit Account
+            </a>
+            <a href="{{ url_for('list_accounts') }}" class="btn btn-secondary">
+                ← Back to Accounts
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Account Status Banner -->
+<div class="row mb-3">
+    <div class="col-12">
+        <div class="card" style="background: {% if account.status == 'active' %}linear-gradient(135deg, #d4edda, #c3e6cb){% else %}linear-gradient(135deg, #f8d7da, #f5c6cb){% endif %}; border-left: 5px solid {% if account.status == 'active' %}var(--success-color){% else %}var(--danger-color){% endif %};">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+                <div style="display: flex; align-items: center; gap: 1rem;">
+                    <div style="font-size: 2.5rem;">
+                        {% if account.status == 'active' %}✅{% else %}⏸️{% endif %}
+                    </div>
+                    <div>
+                        <h3 style="margin: 0; color: {% if account.status == 'active' %}#155724{% else %}#721c24{% endif %};">
+                            Account {% if account.status == 'active' %}Active{% else %}Inactive{% endif %}
+                        </h3>
+                        <p style="margin: 0; color: {% if account.status == 'active' %}#155724{% else %}#721c24{% endif %};">
+                            {% if account.status == 'active' %}
+                                This account is currently active and fully operational
+                            {% else %}
+                                This account is currently inactive and may have limited functionality
+                            {% endif %}
+                        </p>
+                    </div>
+                </div>
+                
+                <div style="text-align: right;">
+                    <div style="font-size: 0.9rem; color: {% if account.status == 'active' %}#155724{% else %}#721c24{% endif %}; opacity: 0.8;">
+                        Created: {{ account.created_date }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Account Information Cards -->
+<div class="row">
+    <!-- Personal Information -->
+    <div class="col-6">
+        <div class="card">
+            <h3 style="color: var(--primary-color); margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                👤 Personal Information
+            </h3>
+            
+            <div style="display: grid; gap: 1rem;">
+                <div style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; background: #f8f9fa; border-radius: 6px;">
+                    <div>
+                        <strong>Full Name</strong>
+                        <div style="color: var(--light-text); margin-top: 0.25rem;">Legal name on account</div>
+                    </div>
+                    <div style="text-align: right; font-size: 1.1rem; font-weight: bold;">
+                        {{ account.first_name }} {{ account.last_name }}
+                    </div>
+                </div>
+                
+                <div style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; background: #f8f9fa; border-radius: 6px;">
+                    <div>
+                        <strong>Email Address</strong>
+                        <div style="color: var(--light-text); margin-top: 0.25rem;">Primary contact method</div>
+                    </div>
+                    <div style="text-align: right;">
+                        <a href="mailto:{{ account.email }}" style="color: var(--secondary-color); text-decoration: none; font-weight: bold; display: flex; align-items: center; gap: 0.5rem;">
+                            📧 {{ account.email }}
+                        </a>
+                    </div>
+                </div>
+                
+                <div style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; background: #f8f9fa; border-radius: 6px;">
+                    <div>
+                        <strong>Department</strong>
+                        <div style="color: var(--light-text); margin-top: 0.25rem;">Organizational unit</div>
+                    </div>
+                    <div style="text-align: right; font-size: 1.1rem; font-weight: bold; display: flex; align-items: center; gap: 0.5rem;">
+                        🏢 {{ account.department }}
+                    </div>
+                </div>
+                
+                <div style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; background: #f8f9fa; border-radius: 6px;">
+                    <div>
+                        <strong>Account ID</strong>
+                        <div style="color: var(--light-text); margin-top: 0.25rem;">Unique identifier</div>
+                    </div>
+                    <div style="text-align: right; font-family: monospace; font-size: 1.1rem; font-weight: bold;">
+                        #{{ account.id }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Account Details -->
+    <div class="col-6">
+        <div class="card">
+            <h3 style="color: var(--primary-color); margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                💼 Account Details
+            </h3>
+            
+            <div style="display: grid; gap: 1rem;">
+                <div style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; background: #f8f9fa; border-radius: 6px;">
+                    <div>
+                        <strong>Account Type</strong>
+                        <div style="color: var(--light-text); margin-top: 0.25rem;">Service level</div>
+                    </div>
+                    <div style="text-align: right;">
+                        <span style="background: 
+                            {% if account.account_type == 'premium' %}linear-gradient(135deg, #f39c12, #e67e22)
+                            {% elif account.account_type == 'standard' %}linear-gradient(135deg, #3498db, #2980b9)
+                            {% else %}linear-gradient(135deg, #95a5a6, #7f8c8d){% endif %};
+                            color: white; padding: 0.5rem 1rem; border-radius: 20px; font-weight: bold; text-transform: capitalize;">
+                            {% if account.account_type == 'premium' %}👑
+                            {% elif account.account_type == 'standard' %}⭐
+                            {% else %}🔹{% endif %}
+                            {{ account.account_type }}
+                        </span>
+                    </div>
+                </div>
+                
+                <div style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; background: #f8f9fa; border-radius: 6px;">
+                    <div>
+                        <strong>Current Status</strong>
+                        <div style="color: var(--light-text); margin-top: 0.25rem;">Account state</div>
+                    </div>
+                    <div style="text-align: right;">
+                        <span style="background: 
+                            {% if account.status == 'active' %}var(--success-color)
+                            {% else %}var(--danger-color){% endif %};
+                            color: white; padding: 0.5rem 1rem; border-radius: 20px; font-weight: bold; text-transform: capitalize;">
+                            {% if account.status == 'active' %}✅{% else %}⏸️{% endif %} {{ account.status }}
+                        </span>
+                    </div>
+                </div>
+                
+                <div style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; background: #f8f9fa; border-radius: 6px;">
+                    <div>
+                        <strong>Account Balance</strong>
+                        <div style="color: var(--light-text); margin-top: 0.25rem;">Current balance</div>
+                    </div>
+                    <div style="text-align: right; font-size: 1.3rem; font-weight: bold; color: var(--success-color);">
+                        💰 ${{ "{:,.2f}".format(account.balance) }}
+                    </div>
+                </div>
+                
+                <div style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; background: #f8f9fa; border-radius: 6px;">
+                    <div>
+                        <strong>Created Date</strong>
+                        <div style="color: var(--light-text); margin-top: 0.25rem;">Account opened</div>
+                    </div>
+                    <div style="text-align: right; font-size: 1.1rem; font-weight: bold;">
+                        📅 {{ account.created_date }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Action Buttons -->
+<div class="row">
+    <div class="col-12">
+        <div class="card text-center" style="background: linear-gradient(135deg, #ecf0f1, #bdc3c7);">
+            <h3 style="color: var(--primary-color); margin-bottom: 1.5rem;">🔧 Account Actions</h3>
+            
+            <div style="display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap;">
+                <a href="{{ url_for('edit_account', account_id=account.id) }}" class="btn btn-primary">
+                    ✏️ Edit Account Information
+                </a>
+                
+                {% if account.status == 'active' %}
+                    <button onclick="toggleAccountStatus({{ account.id }}, 'inactive')" class="btn btn-warning">
+                        ⏸️ Deactivate Account
+                    </button>
+                {% else %}
+                    <button onclick="toggleAccountStatus({{ account.id }}, 'active')" class="btn btn-success">
+                        ✅ Activate Account
+                    </button>
+                {% endif %}
+                
+                <button onclick="exportAccount({{ account.id }})" class="btn btn-secondary">
+                    📄 Export Account Data
+                </button>
+                
+                <form style="display: inline;" method="POST" action="{{ url_for('delete_account', account_id=account.id) }}" 
+                      onsubmit="return confirmDelete('{{ account.first_name }} {{ account.last_name }}');">
+                    <button type="submit" class="btn btn-danger">
+                        🗑️ Delete Account
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Account Timeline (Future Enhancement) -->
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <h3 style="color: var(--primary-color); margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                📈 Account Timeline
+            </h3>
+            
+            <div style="border-left: 3px solid var(--secondary-color); padding-left: 2rem; position: relative;">
+                <!-- Timeline Entry -->
+                <div style="margin-bottom: 2rem; position: relative;">
+                    <div style="position: absolute; left: -2.75rem; width: 20px; height: 20px; border-radius: 50%; background: var(--success-color); border: 3px solid white; box-shadow: 0 0 0 3px var(--success-color);"></div>
+                    <div style="background: #f8f9fa; padding: 1rem; border-radius: 6px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                            <strong>Account Created</strong>
+                            <small style="color: var(--light-text);">{{ account.created_date }}</small>
+                        </div>
+                        <p style="margin: 0; color: var(--light-text);">
+                            Account created for {{ account.first_name }} {{ account.last_name }} in {{ account.department }} department
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- Future Timeline Entries -->
+                <div style="text-align: center; padding: 2rem; color: var(--light-text);">
+                    <div style="font-size: 2rem; margin-bottom: 0.5rem;">⏳</div>
+                    <p>More timeline events will appear here as they occur</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    function confirmDelete(accountName) {
+        return confirm(`⚠️ DANGER: You are about to permanently delete the account for ${accountName}.\n\n` +
+                      `This action will:\n` +
+                      `• Remove all account data\n` +
+                      `• Delete associated records\n` +
+                      `• Cannot be undone\n\n` +
+                      `Type "DELETE" to confirm you want to proceed.`) && 
+               prompt(`Please type "DELETE" to confirm deletion of ${accountName}'s account:`) === "DELETE";
+    }
+    
+    function toggleAccountStatus(accountId, newStatus) {
+        const action = newStatus === 'active' ? 'activate' : 'deactivate';
+        const confirmation = confirm(`Are you sure you want to ${action} this account?`);
+        
+        if (confirmation) {
+            // In a real app, this would make an API call
+            alert(`Account ${action}d successfully! (This would be implemented with an API call)`);
+            // window.location.reload();
+        }
+    }
+    
+    function exportAccount(accountId) {
+        // In a real app, this would trigger a download
+        alert(`Account data export initiated! (This would generate a downloadable file)`);
+    }
+    
+    // Add smooth animations
+    document.addEventListener('DOMContentLoaded', function() {
+        const cards = document.querySelectorAll('.card');
+        cards.forEach((card, index) => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(30px)';
+            card.style.transition = 'all 0.6s ease';
+            
+            setTimeout(() => {
+                card.style.opacity = '1';
+                card.style.transform = 'translateY(0)';
+            }, index * 150);
+        });
+    });
+</script>
+{% endblock %}
