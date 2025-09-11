@@ -337,7 +337,15 @@ def health_check():
     })
 
 if __name__ == '__main__':
-    port = int(os.environ.get('PORT', 5000))
+    # Railway provides PORT environment variable
+    port = int(os.environ.get('PORT', 8080))
     print("🚀 Starting AccountPro")
     print(f"📍 Running on port {port}")
-    app.run(host='0.0.0.0', port=port, debug=False)
+    
+    # Railway requires specific host/port binding
+    app.run(
+        host='0.0.0.0', 
+        port=port, 
+        debug=False,
+        threaded=True  # Important for Railway
+    )
